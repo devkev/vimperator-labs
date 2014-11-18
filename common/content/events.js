@@ -622,7 +622,7 @@ const Events = Module("events", {
      * @param {string} key The key code to test.
      * @returns {boolean}
      */
-    isCancelKey: function (key) key == "<Esc>" || key == "<C-[>" || key == "<C-c>",
+    isCancelKey: function (key) key == "<Esc>" || key == "<C-[>" || key == "<C-q>",
 
     /**
      * Whether <b>key</b> is a key code defined to go back to NORMAL mode
@@ -888,15 +888,13 @@ const Events = Module("events", {
                 this._macros.set(this._currentMacro, this._macros.get(this._currentMacro) + key);
         }
 
-        if (key == "<C-c>")
-            liberator.interrupted = true;
-
         // feedingKeys needs to be separate from interrupted so
         // we can differentiate between a recorded <C-c>
         // interrupting whatever it's started and a real <C-c>
         // interrupting our playback.
         if (events.feedingKeys && !event.isMacro) {
-            if (key == "<C-c>") {
+            if (key == "<C-q>") {
+                liberator.interrupted = true;
                 events.feedingKeys = false;
                 if (modes.isReplaying) {
                     modes.isReplaying = false;
@@ -906,6 +904,12 @@ const Events = Module("events", {
             else
                 events.duringFeed.push(event);
 
+            killEvent();
+            return;
+        }
+
+        if (key == "<C-q>") {
+            liberator.interrupted = true;
             killEvent();
             return;
         }
