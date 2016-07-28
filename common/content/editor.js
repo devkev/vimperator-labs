@@ -704,7 +704,7 @@ const Editor = Module("editor", {
             function () { editor.pasteClipboard(); });
 
         mappings.add(modes.getCharModes("i"),
-            ["<C-i>", "<C-g>"], "Edit text field with an external editor",
+            ["<C-i>", "<C-g>", "<C-S-g>"], "Edit text field with an external editor",
             function () { editor.editFieldExternally(); });
 
         mappings.add([modes.INSERT],
